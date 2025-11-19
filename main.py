@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QApplication
 from gui import VotingApp
 
 def main() -> None:
+    """ main function"""
     try:
         app = QApplication(sys.argv)
         main_window = VotingApp()
@@ -14,4 +15,5 @@ def main() -> None:
         sys.exit(1)
 
 if __name__ == "__main__":
+
     main()
