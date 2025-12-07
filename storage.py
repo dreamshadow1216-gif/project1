@@ -2,10 +2,17 @@ import csv
 import os
 
 VOTES_FILE = "votes.csv"
+"""CSV file storing all votes."""
+
 VOTER_IDS_FILE = "voter_ids.csv"
+"""CSV file storing all voter IDs."""
+
 CANDIDATES = ["Alice", "Bob", "Charlie"]
+"""List of candidates available for voting."""
+
 
 def process_vote(candidate_index: int, voter_identifier: str) -> None:
+    """Record a vote for a candidate if voter hasn't voted."""
     if has_voted(voter_identifier):
         raise ValueError("Duplicate vote detected.")
 
@@ -15,7 +22,9 @@ def process_vote(candidate_index: int, voter_identifier: str) -> None:
     except IndexError:
         raise ValueError("Invalid candidate index.")
 
+
 def write_vote(candidate_name: str, voter_identifier: str) -> None:
+    """Write vote and voter ID to CSV files."""
     if not os.path.exists(VOTES_FILE):
         with open(VOTES_FILE, mode="w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
@@ -34,40 +43,10 @@ def write_vote(candidate_name: str, voter_identifier: str) -> None:
         writer = csv.writer(file)
         writer.writerow([voter_identifier])
 
+
 def has_voted(voter_identifier: str) -> bool:
+    """Check if a voter ID has already voted."""
     if not os.path.exists(VOTER_IDS_FILE):
         return False
 
-    with open(VOTER_IDS_FILE, mode="r", newline="", encoding="utf-8") as file:
-        reader = csv.reader(file)
-        return any(row[0] == voter_identifier for row in reader if row)
-
-def count_votes() -> int:
-    try:
-        with open(VOTES_FILE, "r", newline="", encoding="utf-8") as file:
-            return sum(1 for row in csv.reader(file) if row)
-    except FileNotFoundError:
-        return 0
-
-def get_votes_for_candidate(candidate_name: str) -> int:
-    try:
-        with open(VOTES_FILE, "r", newline="", encoding="utf-8") as file:
-            reader = csv.reader(file)
-            return sum(1 for row in reader if row and row[1] == candidate_name)
-    except FileNotFoundError:
-        return 0
-
-def clear_counter_votes() -> None:
-    try:
-        with open(VOTES_FILE, "w", newline="", encoding="utf-8"):
-            pass
-    except Exception as e:
-        raise Exception(f"Error clearing vote file: {str(e)}")
-
-def clear_voter_ids() -> None:
-    try:
-        with open(VOTER_IDS_FILE, "w", newline="", encoding="utf-8") as file:
-            writer = csv.writer(file)
-            writer.writerow(["Voter ID"])  # Write header for voter IDs (clearing the content)
-    except Exception as e:
-        raise Exception(f"Error clearing voter IDs: {str(e)}")
+    with open(VOTER_IDS_
